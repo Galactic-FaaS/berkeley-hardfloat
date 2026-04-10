@@ -4,25 +4,25 @@ version := "1.5-SNAPSHOT"
 
 name := "hardfloat"
 
-scalaVersion := "2.13.10"
+scalaVersion := "2.13.12"
 
-resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots"),
-  Resolver.sonatypeRepo("releases")
-)
+// Resolvers - use default Maven central
+resolvers := Seq(Resolver.mavenCentral)
 
 Compile / scalaSource := baseDirectory.value / "hardfloat/src/main/scala"
 Test / scalaSource := baseDirectory.value / "hardfloat/tests/src"
 Test / resourceDirectory := baseDirectory.value / "hardfloat/tests/resources"
 
-addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.5.6" cross CrossVersion.full)
-libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.5.6"
+val chiselVersion = "6.6.0"
+
+addCompilerPlugin("org.chipsalliance" %% "chisel-plugin" % chiselVersion cross CrossVersion.full)
+libraryDependencies += "org.chipsalliance" %% "chisel" % chiselVersion
 libraryDependencies ++= Seq("org.scalatest" %% "scalatest" % "3.2.0" % "test")
 libraryDependencies += "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4"
 Test / testForkedParallel := true
 
 publishMavenStyle := true
-publishArtifact in Test := false
+Test / publishArtifact := false
 pomIncludeRepository := { x => false }
 // Don't add 'scm' elements if we have a git.remoteRepo definition,
 //  but since we don't (with the removal of ghpages), add them in below.
